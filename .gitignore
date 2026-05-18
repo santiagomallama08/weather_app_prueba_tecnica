@@ -1,0 +1,87 @@
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Flutter generated files
+.generated/
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/app/build/
+android/build/
+*.apk
+*.aab
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/build/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+DerivedData/
+
+# macOS
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/build/
+
+# Web
+web/.dart_tool/
+
+# Windows / Linux generated
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# IDEs
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+.env.local
+.env.dev
+.env.prod
+!.env.example
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Realm local database files
+*.realm
+*.realm.lock
+*.realm.management/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Sensitive signing files
+*.jks
+*.keystore
+key.properties
+upload-keystore.jks
