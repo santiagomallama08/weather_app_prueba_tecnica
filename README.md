@@ -1,131 +1,70 @@
-# Weather Events App
+Descripción
+Weather Events App consume la VisualCrossing Timeline Weather API para mostrar eventos climáticos (tornados, granizo, vientos fuertes, sismos) y el estado del clima de los últimos 5 días. El usuario puede ingresar una ubicación manualmente, usar su GPS, guardar eventos favoritos y consultar la información sin conexión a internet gracias al almacenamiento local con Realm.
+El proyecto aplica:
 
-Aplicación móvil desarrollada en Flutter para consultar eventos meteorológicos y el pronóstico climático de los últimos 5 días a partir de una ubicación ingresada por el usuario o de la ubicación actual del dispositivo.
+Clean Architecture organizada por features
+Riverpod para manejo de estado
+Realm para persistencia offline
+Flavors dev y prod con recursos independientes
+Tests unitarios en la capa de dominio
 
-Este proyecto fue desarrollado como prueba técnica para el puesto de Desarrollador junior Flutter, aplicando buenas prácticas de arquitectura, separación de responsabilidades, consumo de APIs externas, manejo de estado, persistencia local, flavors, modo offline y pruebas unitarias.
 
----
+Funcionalidades
+Ubicación
 
-## Arquitectura general
+Ingreso manual con sugerencias en tiempo real
+Detección automática por GPS
+Soporte para ciudad, municipio, país, dirección o coordenadas
 
-La aplicación está organizada por módulos funcionales y capas, separando presentación, dominio, datos e infraestructura compartida.
+Eventos meteorológicos
 
-## Objetivo del proyecto
+Listado de eventos desde VisualCrossing (include=events)
+Pantalla de detalle con tipo, descripción, fecha, ubicación y coordenadas
+Agregar y eliminar favoritos
+Ver ubicación del evento en mapa
 
-El objetivo principal es construir una aplicación Flutter para Android/iOS que permita:
+Pronóstico últimos 5 días
 
-- Consultar eventos meteorológicos basados en ubicación.
-- Consultar el clima actual y diario de los últimos 5 días.
-- Permitir ingreso manual de localización.
-- Permitir uso de ubicación actual.
-- Presentar datos en español.
-- Presentar medidas en sistema métrico.
-- Manejar favoritos almacenados localmente.
-- Soportar modo offline con última información guardada.
-- Implementar flavors dev/prod.
-- Incluir pruebas unitarias.
-- Aplicar una arquitectura clara y mantenible.
-## Funcionalidades implementadas
+Clima actual: temperatura, humedad, viento, precipitación, condiciones
+Clima diario: temperatura mínima y máxima por día
+Datos en español y sistema métrico
 
-### Ubicación
+Favoritos
 
-- Ingreso manual de ubicación.
-- Sugerencias de ubicación mientras el usuario escribe.
-- Uso de ubicación actual mediante GPS.
-- Consulta por ciudad, municipio, país, dirección o coordenadas.
+Agregar / eliminar desde cualquier tarjeta de evento
+Feedback visual inmediato: Añadido a favoritos / Eliminado de favoritos
+Icono de corazón con estado visual
+Pantalla independiente de favoritos
+Disponibles sin conexión a internet
 
-### Eventos meteorológicos
+Modo offline
+EstadoComportamientoCon internetConsulta la API, muestra datos frescos y guarda localmenteSin internetCarga la última información guardada y notifica al usuario
 
-- Consulta de eventos desde VisualCrossing Timeline Weather API.
-- Uso de `include=events`.
-- Listado de eventos encontrados.
-- Pantalla de detalle del evento.
-- Visualización de tipo, descripción, fecha, ubicación y coordenadas.
-- Opción de agregar o eliminar favoritos.
-- Opción de ver la ubicación en mapa.
-
-### Pronóstico últimos 5 días
-
-- Consulta del clima actual.
-- Consulta del clima diario de los últimos 5 días.
-- Temperatura actual.
-- Temperatura mínima y máxima.
-- Humedad.
-- Viento.
-- Precipitación.
-- Condiciones climáticas.
-- Coordenadas.
-- Datos en español y sistema métrico.
-
-### Favoritos
-
-- Agregar eventos a favoritos.
-- Eliminar eventos de favoritos.
-- Mensajes visuales al usuario:
-  - `Añadido a favoritos.`
-  - `Eliminado de favoritos.`
-- Cambio visual del corazón en tarjetas.
-- Pantalla independiente de favoritos.
-- Lectura local de favoritos.
-
-### Modo offline
-
-La aplicación detecta cuando no hay conexión a internet.
-
-Con internet:
-
-- Consulta VisualCrossing.
-- Muestra datos actualizados.
-- Guarda información localmente.
-
-Sin internet:
-
-- Carga la última información guardada cuando existe.
-- Notifica al usuario que no tiene conexión.
-- Permite consultar favoritos guardados.
-
-Mensaje mostrado:
-
-Sin conexión. Mostrando la última información guardada.
+Mensaje mostrado: Sin conexión. Mostrando la última información guardada.
 
 Mapa
-Vista de mapa con OpenStreetMap.
-Implementación usando flutter_map.
-No requiere API Key de Google Maps.
-Marcador de ubicación.
-Visualización de coordenadas.
-Flavors
 
-La app cuenta con dos flavors:
+Vista con OpenStreetMap usando flutter_map (sin API Key de Google Maps)
+Marcador de ubicación
+Visualización de coordenadas en pantalla
 
-dev
-prod
-
-Cada flavor tiene:
-
-Entry point independiente.
-Nombre diferente.
-Icono diferente.
-Configuración separada.
 
 Arquitectura
-
-El proyecto está organizado por features y capas.
-
+El proyecto sigue Clean Architecture organizado por features. Cada feature contiene sus propias capas de datos, dominio y presentación, sin mezclar responsabilidades entre módulos.
 lib/
 ├── core/
-│   ├── config/
-│   ├── di/
-│   ├── error/
-│   ├── network/
-│   ├── theme/
-│   └── utils/
+│   ├── config/         # AppConfig, flavors, variables de entorno
+│   ├── di/             # Inyección de dependencias con GetIt
+│   ├── error/          # Failures, Exceptions
+│   ├── network/        # Dio client, interceptors
+│   ├── theme/          # Colores, tipografía, tema
+│   └── utils/          # Constantes, extensions, formatters
 │
 ├── features/
 │   ├── events/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
+│   │   ├── data/       # API, modelos JSON, Realm, repositorio impl
+│   │   ├── domain/     # Entidades, contratos, casos de uso
+│   │   └── presentation/ # Screens, widgets, notifiers
 │   │
 │   ├── forecast/
 │   │   ├── data/
@@ -136,287 +75,117 @@ lib/
 │       ├── domain/
 │       └── presentation/
 │
-├── router/
+├── router/             # GoRouter, rutas nombradas
 ├── app.dart
-├── main_dev.dart
-└── main_prod.dart
-Capa presentation
+├── main_dev.dart       # Entry point flavor dev
+└── main_prod.dart      # Entry point flavor prod
 
-Contiene:
-
-Screens.
-Widgets.
-Notifiers.
-Estados de carga.
-Estados de error.
-Estados offline.
 Capa domain
-
-Contiene:
-
-Entidades.
-Contratos de repositorios.
-Casos de uso.
-
-Esta capa no depende de Flutter ni de implementaciones externas.
-
+Entidades puras Dart, contratos de repositorios (interfaces abstractas) y casos de uso. No depende de Flutter ni de implementaciones externas. Esto permite testearla de forma completamente aislada.
 Capa data
-
-Contiene:
-
-APIs.
-Modelos.
-Repositorios implementados.
-Almacenamiento local.
+Implementaciones de repositorios con estrategia offline-first: intenta la red primero, guarda en Realm, y devuelve cache si no hay conexión.
+Capa presentation
+Screens ConsumerWidget, widgets reutilizables y notifiers Riverpod (AsyncNotifier, StateNotifier). Los estados manejados son: loading, data, error y offline.
 Capa core
+Elementos transversales a todos los features: cliente HTTP, inyección de dependencias, tema visual, manejo de errores y configuración por flavor.
 
-Contiene elementos transversales:
-
-Configuración global.
-Inyección de dependencias.
-Cliente HTTP.
-Manejo de red.
-Tema visual.
-Constantes.
-Errores.
 Decisiones técnicas
-Riverpod
-
-Se usó Riverpod para manejar el estado de la aplicación de forma clara y separada de la UI.
-
-Estados principales:
-
-Loading.
-Error.
-Data.
-Offline.
-Favoritos.
-GetIt
-
-GetIt centraliza la creación de dependencias como:
-
-Dio.
-Repositorios.
-Casos de uso.
-Servicios locales.
-NetworkInfo.
-Dio
-
-Se utilizó Dio para consumir APIs externas por su manejo claro de:
-
-Base URL.
-Query parameters.
-Interceptores.
-Timeouts.
-Realm
-
-Realm se utilizó para persistencia local y soporte offline.
-
-GoRouter
-
-GoRouter se usó para navegación entre pantallas usando rutas centralizadas.
-
-Flutter Map
-
-Se eligió Flutter Map con OpenStreetMap para evitar dependencia de Google Maps Platform y no requerir API Key adicional.
+HerramientaJustificaciónRiverpodManejo de estado reactivo con AsyncNotifier. Separa la lógica de la UI, facilita testing y gestiona los estados loading / error / data de forma nativaGetItInyección de dependencias sin BuildContext. Permite registrar y proveer repositorios y casos de uso de forma centralizadaDioCliente HTTP con soporte de interceptors para autenticación, logging y detección de conectividadRealmPersistencia local para cache offline y favoritos. Soporta esquemas tipados y queries sin SQLGoRouterNavegación declarativa con rutas nombradas, compatible con el paradigma de Riverpodflutter_map + OpenStreetMapVista de mapa sin requerir API Key adicional de Google Maps PlatformClean ArchitectureSeparación clara de responsabilidades. La capa de dominio es independiente de Flutter, lo que hace los tests unitarios simples y confiables
 
 API utilizada
+VisualCrossing Timeline Weather API
+Base URL: https://weather.visualcrossing.com
+Endpoint: /VisualCrossingWebServices/rest/services/timeline
+Endpoints
+# Eventos meteorológicos
+GET /timeline/{lat},{lng}?include=events&unitGroup=metric&lang=es&contentType=json
 
-La aplicación consume VisualCrossing Timeline Weather API.
+# Pronóstico últimos 5 días
+GET /timeline/{lat},{lng}/last5days?include=days,current&unitGroup=metric&lang=es&contentType=json
+Parámetros globales
+ParámetroValorDescripciónunitGroupmetricTemperaturas en °C, viento en km/hlangesRespuestas en españolcontentTypejsonFormato de respuesta
 
-Base URL:
+Configuración del proyecto
+Requisitos previos
 
-https://weather.visualcrossing.com
+Flutter 3.19+ / Dart 3.3+
+Android Studio o Xcode configurado
+API Key gratuita en visualcrossing.com
 
-Endpoint base:
-
-/VisualCrossingWebServices/rest/services/timeline
-Eventos
-
-Para eventos meteorológicos:
-
-include=events
-Últimos 5 días
-
-Para clima actual y diario:
-
-include=days,current
-Parámetros comunes
-unitGroup=metric
-lang=es
-contentType=json
 Variables de entorno
-
-El proyecto usa un archivo .env.
-
-Crear en la raíz del proyecto:
-
-.env
-
-Contenido:
-
-VISUAL_CROSSING_API_KEY=TU_API_KEY
+Crear el archivo .env en la raíz del proyecto:
+envVISUAL_CROSSING_API_KEY=INGRESE_API_KEY
 VISUAL_CROSSING_BASE_URL=https://weather.visualcrossing.com
-
-También se incluye:
-
-.env.example
-
-Contenido:
-
-VISUAL_CROSSING_API_KEY=YOUR_API_KEY
-VISUAL_CROSSING_BASE_URL=https://weather.visualcrossing.com
-
-La API Key real no debe subirse al repositorio.
-
+Un archivo .env.example está incluido como referencia.
 Instalación
-
-Clonar el repositorio:
-
-git clone <url-del-repositorio>
-
-Entrar al proyecto:
-
+bash# 1. Clonar el repositorio
+git clone https://github.com/santiagomallama08/weather_app_prueba_tecnica.git
 cd weather_events_app
 
-Instalar dependencias:
-
+# 2. Instalar dependencias
 flutter pub get
 
-Generar archivos de Realm:
-
+# 3. Generar archivos de Realm
 dart run realm generate
-Ejecución
-Dev
-flutter run --flavor dev -t lib/main_dev.dart
 
-Si el emulador presenta problemas con DDS:
-
-flutter run --flavor dev -t lib/main_dev.dart --no-dds
-Prod
-flutter run --flavor prod -t lib/main_prod.dart
-Generar APK
-Dev
-flutter build apk --flavor dev -t lib/main_dev.dart
-Prod
-flutter build apk --flavor prod -t lib/main_prod.dart
-
-Los APK se generan en:
-
-build/app/outputs/flutter-apk/
-Flavors
-Dev
-Flavor: dev
-App name: Weather Events Dev
-Application ID: com.example.weather_events_app.dev
-Entry point: lib/main_dev.dart
-Prod
-Flavor: prod
-App name: Weather Events
-Application ID: com.example.weather_events_app
-Entry point: lib/main_prod.dart
-Iconos por flavor
-
-Se configuraron iconos separados usando flutter_launcher_icons.
-
-Archivos:
-
-flutter_launcher_icons-dev.yaml
-flutter_launcher_icons-prod.yaml
-
-Rutas:
-
-assets/dev/icons/app_icon_dev.png
-assets/prod/icons/app_icon_prod.png
-
-Comandos:
-
-dart run flutter_launcher_icons -f flutter_launcher_icons-dev.yaml
-dart run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
-Pruebas unitarias
-
-El proyecto incluye pruebas unitarias para validar la lógica principal de dominio.
-
-Ejecutar:
-
-flutter test
-
-Casos cubiertos:
-
-Obtener eventos por ubicación.
-Validar ubicación vacía en eventos.
-Agregar o eliminar favorito.
-Obtener clima actual y últimos días.
-Validar ubicación vacía en forecast.
-Verificar llamadas a repositorios mediante mocks.
-
-Archivos:
-
-test/features/events/domain/usecases/get_events_test.dart
-test/features/events/domain/usecases/toggle_favorite_test.dart
-test/features/forecast/domain/usecases/get_last_five_days_test.dart
-
-Resultado esperado:
-
-All tests passed
-Análisis estático
-
-Ejecutar:
-
+# 4. Verificar análisis estático
 flutter analyze
 
-El proyecto debe mantenerse sin errores ni warnings relevantes.
+Ejecución por flavor
+Dev
+bashflutter run --flavor dev -t lib/main_dev.dart
 
-Permisos Android
+# Si el emulador presenta problemas con DDS:
+flutter run --flavor dev -t lib/main_dev.dart --no-dds
+Prod
+bashflutter run --flavor prod -t lib/main_prod.dart
+Build APK
+bash# Dev
+flutter build apk --flavor dev -t lib/main_dev.dart
 
-La app requiere permisos para internet y ubicación.
+# Prod
+flutter build apk --flavor prod -t lib/main_prod.dart
 
-En AndroidManifest.xml:
+Los APK se generan en build/app/outputs/flutter-apk/
 
-<uses-permission android:name="android.permission.INTERNET" />
+Diferencias entre flavors
+DevProdApp nameWeather Events DevWeather EventsApplication IDcom.example.weather_events_app.devcom.example.weather_events_appIconoassets/dev/icons/app_icon_dev.pngassets/prod/icons/app_icon_prod.pngEntry pointlib/main_dev.dartlib/main_prod.dart
+Generar iconos por flavor
+bashdart run flutter_launcher_icons -f flutter_launcher_icons-dev.yaml
+dart run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
+
+Tests unitarios
+bashflutter test
+Casos cubiertos
+ArchivoCasosget_events_test.dartObtener eventos por ubicación, validar ubicación vacíatoggle_favorite_test.dartAgregar favorito, eliminar favorito, verificar llamadas al repositorioget_last_five_days_test.dartObtener clima actual y últimos días, validar ubicación vacía
+test/
+├── features/
+│   ├── events/
+│   │   └── domain/usecases/
+│   │       ├── get_events_test.dart
+│   │       └── toggle_favorite_test.dart
+│   └── forecast/
+│       └── domain/usecases/
+│           └── get_last_five_days_test.dart
+
+Resultado esperado: All tests passed
+
+
+Permisos
+Declarados en android/app/src/main/AndroidManifest.xml:
+xml<uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-Manejo offline
 
-El modo offline funciona de la siguiente forma:
-
-Con internet
-1. Se consulta la API.
-2. Se muestran datos actualizados.
-3. Se guarda información localmente.
-Sin internet
-1. Se detecta falta de conexión.
-2. Se consulta el almacenamiento local.
-3. Se muestra la última información guardada.
-4. Se informa al usuario que está sin conexión.
-Favoritos offline
-
-Los favoritos no dependen de conexión a internet.
-
-El usuario puede:
-
-Consultar favoritos guardados.
-Eliminar favoritos.
-Ver aviso si no tiene internet.
 Consideraciones
+Los eventos meteorológicos dependen de la disponibilidad de reportes activos en VisualCrossing para la ubicación consultada. Si una ciudad no tiene eventos registrados en el rango de fechas, la aplicación muestra un estado vacío. Esto es comportamiento esperado de la API, no un error de la aplicación.
 
-Los eventos meteorológicos dependen de la disponibilidad de reportes en VisualCrossing.
-
-Puede pasar que una ciudad no tenga eventos disponibles en el rango consultado. En ese caso la aplicación muestra un mensaje de estado vacío, pero la consulta puede estar funcionando correctamente.
-
-Comandos útiles
+Comandos de referencia rápida
 flutter pub get
 dart run realm generate
 flutter analyze
 flutter test
 flutter run --flavor dev -t lib/main_dev.dart
-flutter run --flavor dev -t lib/main_dev.dart --no-dds
 flutter run --flavor prod -t lib/main_prod.dart
 flutter build apk --flavor dev -t lib/main_dev.dart
 flutter build apk --flavor prod -t lib/main_prod.dart
-
-Autor
-
-Desarrollado por Santiago Mallama como prueba técnica para Desarrolador Flutter Junior.
-
-El objetivo del proyecto fue construir una solución funcional, mantenible y clara, aplicando buenas prácticas de Flutter, arquitectura por features, persistencia local, consumo de APIs externas, manejo offline, flavors y pruebas unitarias.
