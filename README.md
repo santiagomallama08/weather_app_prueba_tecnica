@@ -51,34 +51,8 @@ Visualización de coordenadas en pantalla
 
 Arquitectura
 El proyecto sigue Clean Architecture organizado por features. Cada feature contiene sus propias capas de datos, dominio y presentación, sin mezclar responsabilidades entre módulos.
-lib/
-├── core/
-│   ├── config/         # AppConfig, flavors, variables de entorno
-│   ├── di/             # Inyección de dependencias con GetIt
-│   ├── error/          # Failures, Exceptions
-│   ├── network/        # Dio client, interceptors
-│   ├── theme/          # Colores, tipografía, tema
-│   └── utils/          # Constantes, extensions, formatters
-│
-├── features/
-│   ├── events/
-│   │   ├── data/       # API, modelos JSON, Realm, repositorio impl
-│   │   ├── domain/     # Entidades, contratos, casos de uso
-│   │   └── presentation/ # Screens, widgets, notifiers
-│   │
-│   ├── forecast/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   │
-│   └── location/
-│       ├── domain/
-│       └── presentation/
-│
-├── router/             # GoRouter, rutas nombradas
-├── app.dart
-├── main_dev.dart       # Entry point flavor dev
-└── main_prod.dart      # Entry point flavor prod
+<img width="791" height="473" alt="image" src="https://github.com/user-attachments/assets/e3eaa1c3-f787-4ca1-819a-17f6e6977af2" />
+
 
 Capa domain
 Entidades puras Dart, contratos de repositorios (interfaces abstractas) y casos de uso. No depende de Flutter ni de implementaciones externas. Esto permite testearla de forma completamente aislada.
