@@ -129,18 +129,7 @@ bashdart run flutter_launcher_icons -f flutter_launcher_icons-dev.yaml
 dart run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
 
 Tests unitarios
-bashflutter test
-Casos cubiertos
-ArchivoCasosget_events_test.dartObtener eventos por ubicación, validar ubicación vacíatoggle_favorite_test.dartAgregar favorito, eliminar favorito, verificar llamadas al repositorioget_last_five_days_test.dartObtener clima actual y últimos días, validar ubicación vacía
-test/
-├── features/
-│   ├── events/
-│   │   └── domain/usecases/
-│   │       ├── get_events_test.dart
-│   │       └── toggle_favorite_test.dart
-│   └── forecast/
-│       └── domain/usecases/
-│           └── get_last_five_days_test.dart
+Las pruebas unitarias del proyecto se encuentran organizadas dentro de la carpeta `test`, siguiendo la misma separación por funcionalidades usada en la aplicación. En el módulo de eventos se incluyen pruebas para los casos de uso `get_events_test.dart` y `toggle_favorite_test.dart`, ubicadas en `test/features/events/domain/usecases/`. Estas pruebas validan la obtención de eventos por ubicación, el manejo de ubicaciones vacías y la acción de agregar o eliminar eventos favoritos. En el módulo de pronóstico se encuentra la prueba `get_last_five_days_test.dart`, ubicada en `test/features/forecast/domain/usecases/`, encargada de validar la obtención del clima actual y del pronóstico de los últimos cinco días mediante el repositorio correspondiente.
 
 Resultado esperado: All tests passed
 
